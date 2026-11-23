@@ -41,7 +41,7 @@ Tech: Flutter, Dart, Cubit/Bloc, REST APIs, WebSockets, Firebase, Hive, Google S
 
 Open to remote roles and relocation.
 
-📧 mohammedmego15@gmail.com
+📧 mohmedmgdy1911@gmail.com
 📱 +20 101 541 5210 (WhatsApp)
 💻 github.com/mohamedmagdy2301
 ```
