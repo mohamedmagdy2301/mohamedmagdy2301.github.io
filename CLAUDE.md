@@ -45,6 +45,9 @@ Everything lives in one file: a single `<style>` block in `<head>`, markup in `<
 ### Bilingual EN/AR with runtime switching
 
 The `T` object at the top of the script holds two flat dictionaries, `T.en` and `T.ar`, keyed by short strings (`"j1.b4"`, `"p.escore"`, `"cta.wa"`). `apply(lang)` sets `documentElement.lang` / `dir`, then rewrites every `[data-i18n]` element's `innerHTML` from the dictionary. **Any new user-visible string needs a `data-i18n` key present in both dictionaries**, or it will silently freeze in English on switch. Values may contain inline HTML (`<b>`) — they are assigned via `innerHTML`, not `textContent`.
+An image's `alt` is translated the same way through `data-i18n-alt` (keys `alt.*`), which `apply()`
+writes to the `alt` attribute; an `alt` that is only a product name (`Escore`, `CurAi`) stays
+untranslated. In `v2` the case-study gallery builds its `alt` from the `pv.shot` template.
 
 The `h1` key is the exception: an array of lines, rendered by `paintH1()` into per-character `<span class="ch">` elements with staggered animation delays; the last line gets `.grad`. It must be re-run after every language change.
 
