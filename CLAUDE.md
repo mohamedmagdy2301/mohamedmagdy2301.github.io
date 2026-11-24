@@ -6,11 +6,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A personal CV / portfolio asset folder for Mohamed Magdy Ibrahim (Flutter developer) — **not** a software project. There is no package manager, build step, or test suite here. It holds:
 
-- `index.html` — the portfolio site: one self-contained page (HTML + CSS + JS, ~1070 lines, ~530 KB)
-- `v2/index.html` — a second, separate portfolio page served at `/v2`, with the project case-study
-  view (see below)
+- `index.html` — the portfolio site served at the root, with the project case-study view (see
+  *index.html — the case-study view* below). It was built as `v2` and promoted to the root.
+- `v1/index.html` — the original portfolio page, one self-contained page (HTML + CSS + JS, ~1070
+  lines, ~530 KB), kept and served at `/v1`
+- `v2/index.html`, `mohamed-magdy/index.html`, `mohamed-magdy/v2/index.html` — redirect stubs only,
+  so links shared before the move keep working (see *Deployment*)
 - `Mohamed_Magdy.pdf` — the résumé the pages link to. Both pages link it by relative path
-  (`Mohamed_Magdy.pdf` from the root, `../Mohamed_Magdy.pdf` from `v2/`), so it must keep this exact
+  (`Mohamed_Magdy.pdf` from the root, `../Mohamed_Magdy.pdf` from `v1/`), so it must keep this exact
   name at the repo root or every résumé button 404s.
 - `assets/` — source material, referenced by nothing at runtime (see below), one folder per kind:
   - `cv/` — `cv-plaintext.txt` (the canonical CV content; source of truth for dates, metrics and
@@ -21,10 +24,10 @@ A personal CV / portfolio asset folder for Mohamed Magdy Ibrahim (Flutter develo
     `curai-logo.png`
   - `portraits/` — `portrait-suit.jpeg`, `portrait-closeup.jpeg`
   - `certificates/` — `eelu-bsc-certificate.webp`
-  - `shots/` — app screenshots, one folder per project, embedded into the `v2` case studies by
+  - `shots/` — app screenshots, one folder per project, embedded into the root page's case studies by
     `tools/embed-shots.py`; see `assets/shots/README.md`
 - `tools/embed-shots.py` — the only script in the repo; it rewrites the `SHOTS` registry in
-  `v2/index.html`
+  `index.html`
 
 Nothing in `assets/` is loaded by either page — both are fully self-contained, with every image
 inlined as base64. The folder is the archive of originals the embedded copies were cropped from, so
@@ -32,13 +35,13 @@ edit an image there and it changes nothing until you re-embed it (`assets/shots/
 only in that a script does the re-embedding for you). A portrait used on the page (the graduation
 photo) has no original in `assets/`; it exists only as embedded base64.
 
-To view the page: open `index.html` directly in a browser. No server, no build, no dependencies to install.
+To view a page: open `index.html` (or `v1/index.html`) directly in a browser. No server, no build, no dependencies to install.
 
 Filenames are kebab-case with no spaces, and describe the content rather than its origin — the
 originals arrived as `WhatsApp Image 2026-08-25 at 3.19.50 PM.jpeg` and `Tarkibat-wide.webp` (which
 was in fact a 240×240 square icon, not a wide image). Keep new files to that convention.
 
-## index.html architecture
+## v1/index.html architecture
 
 Everything lives in one file: a single `<style>` block in `<head>`, markup in `<body>`, a single `<script>` at the end. Keep it that way — the page is meant to be openable from disk and mailed as one file. The only external requests are the Google Fonts link (Sora / Plus Jakarta Sans / JetBrains Mono / Tajawal) and, on the published site only, the GoatCounter loader (see *Analytics* below); all images are inlined as `data:image/…;base64` (20 of them), which is why the file is large.
 
@@ -47,7 +50,7 @@ Everything lives in one file: a single `<style>` block in `<head>`, markup in `<
 The `T` object at the top of the script holds two flat dictionaries, `T.en` and `T.ar`, keyed by short strings (`"j1.b4"`, `"p.escore"`, `"cta.wa"`). `apply(lang)` sets `documentElement.lang` / `dir`, then rewrites every `[data-i18n]` element's `innerHTML` from the dictionary. **Any new user-visible string needs a `data-i18n` key present in both dictionaries**, or it will silently freeze in English on switch. Values may contain inline HTML (`<b>`) — they are assigned via `innerHTML`, not `textContent`.
 An image's `alt` is translated the same way through `data-i18n-alt` (keys `alt.*`), which `apply()`
 writes to the `alt` attribute; an `alt` that is only a product name (`Escore`, `CurAi`) stays
-untranslated. In `v2` the case-study gallery builds its `alt` from the `pv.shot` template.
+untranslated. In the root page the case-study gallery builds its `alt` from the `pv.shot` template.
 
 The `h1` key is the exception: an array of lines, rendered by `paintH1()` into per-character `<span class="ch">` elements with staggered animation delays; the last line gets `.grad`. It must be re-run after every language change.
 
@@ -110,9 +113,10 @@ up, prefer it — the current one is a recovered crop, so it is shorter than the
 
 Content changes usually touch three places at once: the markup, `T.en`, and `T.ar`. Facts (job dates, the 65%/54%/5,000+/74% figures, store URLs, education) should stay consistent with `assets/cv/cv-plaintext.txt`. To swap an image, base64-encode it and replace the `src` inline — do not introduce an external image path.
 
-## v2/index.html — the case-study view
+## index.html — the case-study view
 
-`v2` is its own page with its own dictionary and its own CSS; it shares no code with `index.html`.
+The root page is its own page with its own dictionary and its own CSS; it shares no code with
+`v1/index.html`.
 It follows the same contracts (one file, `T.en`/`T.ar` for every user-visible string, logical
 properties for RTL, a reduced-motion escape) and adds a project case study on top.
 
@@ -149,17 +153,23 @@ Nothing was ever collected before this was added, and it cannot backfill: the co
 moment the code is filled in and deployed. It reports aggregates only — visits, country, browser,
 device, referrer, page — never visitor identity.
 
-`v2` additionally defines `window.gcCount(path, title)` and calls it from `pvOpen()`, so opening a
-case study is counted as `/v2/p/<key>` instead of vanishing into the `#p/<key>` hash. Calls made
+The root page additionally defines `window.gcCount(path, title)` and calls it from `pvOpen()`, so opening a
+case study is counted as `/p/<key>` instead of vanishing into the `#p/<key>` hash. Calls made
 before the loader arrives are queued and flushed on its `onload`, which is the deep-link-on-load
-case (`/v2/#p/escore`). Keep `gcCount` defined **before** the body script — `pvFromHash()` runs at
-the end of it and can reach `pvOpen()` immediately. In `index.html` there is no `gcCount`; the
+case (`/#p/escore`). Keep `gcCount` defined **before** the body script — `pvFromHash()` runs at
+the end of it and can reach `pvOpen()` immediately. In `v1/index.html` there is no `gcCount`; the
 plain pageview is all that page needs.
 
 ## Deployment
 
-The folder is a git repo pushed to `https://github.com/mohamedmagdy2301/mohamed-magdy.git` and served
-by GitHub Pages from the `main` branch, root directory — which is why the page is named `index.html`.
+The folder is a git repo pushed to GitHub and served by GitHub Pages from the `main` branch, root
+directory — which is why the page is named `index.html`. The repo is meant to be named
+`mohamedmagdy2301.github.io`, so the site is served at https://mohamedmagdy2301.github.io/ (it was
+formerly the project repo `mohamed-magdy`, served under `/mohamed-magdy/`).
 Everything committed here is public — including `assets/`, so treat anything placed there as
-published. `v2/index.html` is served at `/v2`; keep both pages' résumé links pointing at
-`Mohamed_Magdy.pdf` at the repo root (see the file inventory above).
+published. Keep both pages' résumé links pointing at `Mohamed_Magdy.pdf` at the repo root (see the
+file inventory above).
+
+The old addresses (`/mohamed-magdy/`, `/mohamed-magdy/v2/`, `/v2/`) are served by redirect stubs that
+forward to the root and keep a `#p/<key>` hash. Their targets are relative (`../`, `../../`), so they
+work both before and after the repo rename. Do not delete them while old links may still be out there.

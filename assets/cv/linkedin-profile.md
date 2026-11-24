@@ -229,7 +229,7 @@ developer، وفيها حاجات بتضر زي `Formatting Documents` و `Langu
 | ٢ | `play.google.com/store/apps/details?id=com.escore.app` | `Escore on Google Play` | `The same Flutter codebase on Android.` |
 | ٣ | `play.google.com/store/apps/details?id=com.puresoft.homeservices` | `Tarkibat — Services Marketplace` | `Connects property owners with tradespeople. Clean Architecture, BLoC/Cubit and Firebase.` |
 | ٤ | `apps.apple.com/us/app/sound-to-read/id6751246943` | `Sound To Read — Phonics for Kids` | `Audio-based phonics lessons for children aged 6–12, published in the kids category.` |
-| ٥ | `mohamedmagdy2301.github.io/mohamed-magdy/` | `Portfolio` | `Case studies for every shipped app, in English and Arabic.` |
+| ٥ | `mohamedmagdy2301.github.io` | `Portfolio` | `Case studies for every shipped app, in English and Arabic.` |
 | ٦ | الـ CV (موجود بالفعل) | سيبه | سيبه |
 | ٧ | بوست CurAi (موجود بالفعل) | سيبه | سيبه |
 | ٨ | GitHub (موجود بالفعل) | سيبه | سيبه |
@@ -239,7 +239,7 @@ developer، وفيها حاجات بتضر زي `Formatting Documents` و `Langu
 
 💡 لينك المتجر بيجيب أيقونة التطبيق كصورة للكارت لوحده — فالقسم بيبقى شكله زي معرض تطبيقات فعلاً.
 
-💡 لو عايز لينك مباشر للـ CV: `https://mohamedmagdy2301.github.io/mohamed-magdy/Mohamed_Magdy.pdf`
+💡 لو عايز لينك مباشر للـ CV: `https://mohamedmagdy2301.github.io/Mohamed_Magdy.pdf`
 
 ## ٦. المهارات (Skills)
 

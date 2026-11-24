@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Embed app screenshots into the case-study galleries of v2/index.html.
+"""Embed app screenshots into the case-study galleries of index.html.
 
 Drop screenshots into a folder per project:
 
@@ -13,7 +13,7 @@ then run:
     python tools/embed-shots.py
 
 Every image is resized, converted to WebP and written into the `SHOTS`
-registry inside v2/index.html as a data: URI, in filename order — so
+registry inside index.html as a data: URI, in filename order — so
 number the files in the order you want them to appear. A project with no
 folder keeps its fallback (a screenshot already on the page, or nothing).
 
@@ -24,7 +24,7 @@ from PIL import Image
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC  = ROOT / "assets" / "shots"
-PAGE = ROOT / "v2" / "index.html"
+PAGE = ROOT / "index.html"
 
 ORDER = ["escore", "str", "tark", "host", "curai", "azk"]
 # what a project falls back to when it has no folder of its own
