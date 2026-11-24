@@ -139,6 +139,32 @@ altogether. A gallery image whose aspect ratio is not within 0.06 of the phone f
 loses the bezel and renders as a plain card — that is what keeps store thumbnails from being
 cropped into a fake phone.
 
+### Interaction layer (ported from v1)
+
+Beyond v1's feature set the root page adds a light/dark theme (`setTheme`, saved as `mm-theme`;
+the `T` key toggles it), remembers the language (`mm-lang`), and has a "How I work" section. It
+also carries v1's interaction layer, rebuilt on the root's own tokens so it follows the theme:
+
+- **Pointer effects**: the `#spot` spotlight, the cursor-following glow on every `.card`
+  (`::after` reading `--mx`/`--my`), the 3D card tilt, magnetic `.hcta .btn` buttons and the
+  phone tilt. All of them sit behind `FINE && !RM`. **`#spot` is anchored with physical
+  `top:0;left:0` on purpose.** It is positioned from `clientX`/`clientY`, which are physical, so a
+  logical `inset-inline-start` would put it at the right edge under RTL. It is the one allowed
+  exception to the logical-properties rule; do not "fix" it.
+- **Card tilt and transitions**: `.card` is also `.rv`, and `.rv`'s transition rule comes later in
+  the stylesheet, so it overrides the card's own. The tilt handler writes an inline `transition`
+  while the pointer moves and clears it 800 ms after `pointerleave`. Leave that hand-back in place,
+  or a hovered card keeps a transform-only transition and the hot-reload replay loses its fade.
+- **Floating contact dial**: it is named `.fdial` / `#fdial` because `.dial` is already the contact
+  section's link row. It sits at the bottom inline-start corner, with the hot-reload `.fab` at
+  inline-end. It appears once `scrollY > innerHeight*0.45`, opens on click (and on hover for fine
+  pointers), and closes on an outside click or Escape.
+- **Keyboard hint**: `#hint` lists R / L / T, appears 2.2 s after load and leaves at 9 s, and is
+  hidden under 820 px or on coarse pointers. It is centred with `inset-inline:0;margin-inline:auto`
+  rather than `translateX(-50%)`, which only centres in LTR.
+- **Copy email**: any `a.copy` copies the address to the clipboard and shows a toast. There are two
+  of them: `#copymail` in the contact row and the one in the footer.
+
 ## Analytics
 
 Both pages carry an identical GoatCounter snippet just before `</head>` — a privacy-friendly,
