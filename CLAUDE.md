@@ -173,3 +173,8 @@ file inventory above).
 The old addresses (`/mohamed-magdy/`, `/mohamed-magdy/v2/`, `/v2/`) are served by redirect stubs that
 forward to the root and keep a `#p/<key>` hash. Their targets are relative (`../`, `../../`), so they
 work both before and after the repo rename. Do not delete them while old links may still be out there.
+
+A PDF cannot redirect, so `mohamed-magdy/Mohamed_Magdy.pdf` is a byte-for-byte **copy** of the root
+`Mohamed_Magdy.pdf`, serving the old résumé link
+(`mohamedmagdy2301.github.io/mohamed-magdy/Mohamed_Magdy.pdf`, which was shared on LinkedIn).
+Whenever the résumé changes, copy it over this one too, or that link serves the stale version.
